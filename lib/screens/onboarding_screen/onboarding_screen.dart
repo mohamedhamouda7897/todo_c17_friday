@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,13 +7,15 @@ class OnboardingScreen extends StatelessWidget {
 
   const OnboardingScreen({super.key});
 
+  final bool isDark = false;
+
+  // final bool isEnglish = true;
+
   @override
   Widget build(BuildContext context) {
+    bool isEnglish = context.locale == Locale('en', 'US');
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Image.asset("assets/images/logo.png"),
-      ),
+      appBar: AppBar(title: Image.asset("assets/images/logo.png")),
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -23,21 +26,13 @@ class OnboardingScreen extends StatelessWidget {
             Image.asset("assets/images/creative.png", width: double.infinity),
 
             Text(
-              "Personalize Your Experience",
-              style: GoogleFonts.inter(
-                color: Color(0xFF5669FF),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              "onboardingTitle".tr(),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
 
             Text(
-              "Choose your preferred theme and language to get started with a comfortable, tailored experience that suits your style.",
-              style: GoogleFonts.inter(
-                color: Color(0xFF1C1C1C),
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+              "onboardingSubTitle".tr(),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
 
             Column(
@@ -47,18 +42,37 @@ class OnboardingScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Language",
-                      style: GoogleFonts.inter(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF5669FF),
-                      ),
+                      "language".tr(),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Container(
+                      padding: EdgeInsets.only(right: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          width: 2,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                       child: Row(
                         children: [
-                          Image.asset("assets/images/us.png"),
-                          Image.asset("assets/images/eg.png"),
+                          InkWell(
+                            onTap: () {
+                              context.setLocale(Locale('en', 'US'));
+                            },
+                            child: languageIconWidget("us", isEnglish, context),
+                          ),
+                          SizedBox(width: 16),
+                          InkWell(
+                            onTap: () {
+                              context.setLocale(Locale('ar', 'EG'));
+                            },
+                            child: languageIconWidget(
+                              "eg",
+                              !isEnglish,
+                              context,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -68,18 +82,26 @@ class OnboardingScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Theme",
-                      style: GoogleFonts.inter(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF5669FF),
-                      ),
+                      "theme".tr(),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Container(
+                      padding: EdgeInsets.only(
+                        right: isDark ? 0 : 4,
+                        left: !isDark ? 0 : 4,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          width: 2,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                       child: Row(
                         children: [
-                          Image.asset("assets/images/sun.png"),
-                          Image.asset("assets/images/moon.png"),
+                          themeIconWidget("sun", isDark, context),
+                          SizedBox(width: 16),
+                          themeIconWidget("moon", !isDark, context),
                         ],
                       ),
                     ),
@@ -97,20 +119,65 @@ class OnboardingScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Color(0xFF5669FF),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
                 child: Text(
-                  "Let's Start",
-                  style: GoogleFonts.inter(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  "start".tr(),
+                  style: Theme.of(context).textTheme.displayLarge,
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget themeIconWidget(
+    String iconName,
+    bool isSelected,
+    BuildContext context,
+  ) {
+    return Container(
+      decoration: isSelected
+          ? null
+          : BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: Theme.of(context).colorScheme.primary,
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 5,
+              ),
+            ),
+      child: ImageIcon(
+        AssetImage("assets/images/$iconName.png"),
+        color: !isSelected
+            ? Theme.of(context).colorScheme.surface
+            : Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
+
+  Widget languageIconWidget(
+    String iconName,
+    bool isSelected,
+    BuildContext context,
+  ) {
+    return Container(
+      decoration: !isSelected
+          ? null
+          : BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 5,
+              ),
+            ),
+      child: Image.asset(
+        "assets/images/$iconName.png",
+        width: 24,
+        height: 24,
+        fit: BoxFit.cover,
       ),
     );
   }
