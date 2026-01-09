@@ -22,6 +22,7 @@ class MyThemeData {
       onError: Colors.white,
       surface: Color(0xFFF2FEFF),
       onSurface: Color(0xFF1C1C1C),
+
     ),
     textTheme: TextTheme(
       titleMedium: GoogleFonts.inter(

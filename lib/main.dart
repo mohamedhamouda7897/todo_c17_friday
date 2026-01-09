@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_c17_friday/core/my_theme.dart';
+import 'package:evently_c17_friday/providers/theme_provider.dart';
 import 'package:evently_c17_friday/screens/home_screen/home_screen.dart';
 import 'package:evently_c17_friday/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +14,10 @@ void main() async {
       supportedLocales: [Locale('en', 'US'), Locale('ar', 'EG')],
       path: 'assets/translations',
       fallbackLocale: Locale('en', 'US'),
-      child: MyApp(),
+      child: ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -22,6 +27,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var myProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -29,7 +35,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: MyThemeData.lightTheme,
       darkTheme: MyThemeData.darkTheme,
-      themeMode: ThemeMode.dark,
+      themeMode: myProvider.themeMode,
       initialRoute: OnboardingScreen.routeName,
       routes: {
         OnboardingScreen.routeName: (context) => OnboardingScreen(),

@@ -1,18 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently_c17_friday/core/extentions.dart';
+import 'package:evently_c17_friday/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class OnboardingScreen extends StatelessWidget {
   static const String routeName = "OnbaordingScreen";
 
   const OnboardingScreen({super.key});
 
-  final bool isDark = false;
-
   // final bool isEnglish = true;
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<ThemeProvider>(context);
     bool isEnglish = context.locale == Locale('en', 'US');
     return Scaffold(
       appBar: AppBar(title: Image.asset("assets/images/logo.png")),
@@ -81,27 +82,42 @@ class OnboardingScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "theme".tr(),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
+                    Text("theme".tr(), style: context.getLargeTitle()),
                     Container(
                       padding: EdgeInsets.only(
-                        right: isDark ? 0 : 4,
-                        left: !isDark ? 0 : 4,
+                        right: provider.themeMode == ThemeMode.dark ? 0 : 4,
+                        left: provider.themeMode == ThemeMode.light ? 0 : 4,
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
                           width: 2,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: context.getThemeObject().colorScheme.primary,
                         ),
                       ),
                       child: Row(
                         children: [
-                          themeIconWidget("sun", isDark, context),
+                          InkWell(
+                            onTap: () {
+                              provider.changeTheme(ThemeMode.light);
+                            },
+                            child: themeIconWidget(
+                              "sun",
+                              provider.themeMode != ThemeMode.light,
+                              context,
+                            ),
+                          ),
                           SizedBox(width: 16),
-                          themeIconWidget("moon", !isDark, context),
+                          InkWell(
+                            onTap: () {
+                              provider.changeTheme(ThemeMode.dark);
+                            },
+                            child: themeIconWidget(
+                              "moon",
+                              provider.themeMode == ThemeMode.light,
+                              context,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -119,7 +135,7 @@ class OnboardingScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: context.getThemeObject().colorScheme.primary,
                 ),
                 child: Text(
                   "start".tr(),
