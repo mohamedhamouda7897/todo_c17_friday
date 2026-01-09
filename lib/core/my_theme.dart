@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyThemeData {
-  static const Color primary = Color(0xFF5669FF);
+  static const Color primary = Color(0xFF0E3A99);
   static const Color onSecondary = Color(0xFF1C1C1C);
   static ThemeData lightTheme = ThemeData(
     appBarTheme: AppBarTheme(centerTitle: true),
@@ -25,17 +25,17 @@ class MyThemeData {
 
     ),
     textTheme: TextTheme(
-      titleMedium: GoogleFonts.inter(
+      titleMedium: GoogleFonts.poppins(
         color: onSecondary,
         fontSize: 16,
         fontWeight: FontWeight.w500,
       ),
-      titleLarge: GoogleFonts.inter(
+      titleLarge: GoogleFonts.poppins(
         color: primary,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
-      displayLarge: GoogleFonts.inter(
+      displayLarge: GoogleFonts.poppins(
         color: Colors.white,
         fontSize: 20,
         fontWeight: FontWeight.bold,
